@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes marqueeTreatments {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-treatments {
+  display: flex;
+  width: max-content;
+  animation: marqueeTreatments 25s linear infinite;
+}
+
+.animate-marquee-treatments:hover {
+  animation-play-state: paused;
+}
