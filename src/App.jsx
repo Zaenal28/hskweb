@@ -6,6 +6,7 @@ import TreatmentsPage from './pages/TreatmentsPage';
 import AboutPage from './pages/AboutPage';
 import TreatmentDetail from './pages/TreatmentDetail';
 import ProductsPage from './pages/ProductsPage';
+import ShopPage from './pages/ShopPage';
 import ProductDetail from './pages/ProductDetail';
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
@@ -43,6 +44,9 @@ const App = () => {
           {/* Halaman 2: Halaman Produk & Detail Produk HSK SECRET */}
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/products/:id" element={<ProductDetail />} />
+
+          {/* Halaman Katalog Produk dengan Filter (Kategori + Sub Kategori + Tipe Kulit) */}
+          <Route path="/shop" element={<ShopPage />} />
 
           {/* Halaman Keranjang / Cart, Transaksi / Checkout & Profile Penerima */}
           <Route path="/cart" element={<CartPage />} />

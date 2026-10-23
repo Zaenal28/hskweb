@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Font default seluruh web: Montserrat */
+html,
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
 @keyframes marqueeTreatments {
   0% {
     transform: translateX(0%);
