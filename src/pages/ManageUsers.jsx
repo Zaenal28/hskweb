@@ -109,11 +109,11 @@ const ManageUsers = () => {
   return (
     <div className="space-y-6 font-sans">
       {/* Header */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 bg-white p-6 rounded-xl border border-gray-200">
         <div>
           <div className="flex items-center gap-2">
             <Users className="w-5 h-5 text-[#8B3A4D]" />
-            <h2 className="font-serif text-2xl font-bold text-gray-900">
+            <h2 className="text-xl font-semibold text-gray-900">
               Kelola Akun User Customer &amp; Akun Guest
             </h2>
           </div>
@@ -145,12 +145,12 @@ const ManageUsers = () => {
 
       {/* Mini Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
+        <div className="bg-white p-5 rounded-xl border border-gray-200 flex items-center justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-gray-400">
               Total Semua Akun
             </p>
-            <p className="font-serif text-2xl font-bold text-gray-900 mt-1">
+            <p className="text-xl font-semibold text-gray-900 mt-1">
               {users.length} Pengguna
             </p>
           </div>
@@ -159,7 +159,7 @@ const ManageUsers = () => {
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
+        <div className="bg-white p-5 rounded-xl border border-gray-200 flex items-center justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-gray-400">
               Akun User Customer (Member)
@@ -173,7 +173,7 @@ const ManageUsers = () => {
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
+        <div className="bg-white p-5 rounded-xl border border-gray-200 flex items-center justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-gray-400">
               Akun Guest (Tamu Checkout)
@@ -224,11 +224,11 @@ const ManageUsers = () => {
       </div>
 
       {/* Users Table */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-[#FDF2F2] text-[#8B3A4D] border-b border-[#8B3A4D]/10 text-xs font-semibold uppercase tracking-wider">
+              <tr className="bg-gray-50 text-gray-500 border-b border-gray-200 text-xs font-semibold uppercase tracking-wider">
                 <th className="py-4 px-6">ID Pengguna</th>
                 <th className="py-4 px-6">Nama &amp; Kontak</th>
                 <th className="py-4 px-6">Tipe Akun</th>

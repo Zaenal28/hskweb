@@ -192,11 +192,11 @@ const ManageContent = () => {
   return (
     <div className="space-y-6 font-sans">
       {/* Header */}
-      <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="bg-white p-6 rounded-xl border border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
             <FileEdit className="w-5 h-5 text-[#8B3A4D]" />
-            <h2 className="font-serif text-2xl font-bold text-gray-900">
+            <h2 className="text-xl font-semibold text-gray-900">
               Kelola Konten Clinic &amp; Produk
             </h2>
           </div>
@@ -410,7 +410,7 @@ const ManageContent = () => {
           </div>
 
           {/* BOX 2: DAFTAR SLIDE HERO HALAMAN KLINIK */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 space-y-6">
+          <div className="bg-white rounded-xl border border-gray-200 p-6 sm:p-8 space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-gray-100 pb-4">
               <div>
                 <div className="flex items-center gap-2">
@@ -574,7 +574,7 @@ const ManageContent = () => {
           {/* BOX 3: FORM ABOUT US DAN KONTAK KLINIK */}
           <form
             onSubmit={handleSave}
-            className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 space-y-6"
+            className="bg-white rounded-xl border border-gray-200 p-6 sm:p-8 space-y-6"
           >
             <h3 className="font-serif text-lg font-bold text-[#8B3A4D] border-b border-gray-100 pb-3">
               Pengaturan About Us &amp; Kontak Halaman Klinik
@@ -699,7 +699,7 @@ const ManageContent = () => {
         </div>
       ) : (
         /* TAB 2: KONTEN HALAMAN PRODUK — dipindah ke halaman admin tersendiri */
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 space-y-4 text-center">
+        <div className="bg-white rounded-xl border border-gray-200 p-6 sm:p-8 space-y-4 text-center">
           <ShoppingBag className="w-10 h-10 text-[#8B3A4D] mx-auto" />
           <h3 className="font-serif text-lg font-bold text-[#8B3A4D]">
             Konten Halaman Produk Kini Punya Halaman Sendiri

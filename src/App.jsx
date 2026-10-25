@@ -16,6 +16,7 @@ import AdminLogin from './pages/AdminLogin';
 import AdminLayout from './layouts/AdminLayout';
 import Dashboard from './pages/Dashboard';
 import ManageContent from './pages/ManageContent';
+import ManageClinics from './pages/ManageClinics';
 import ManageProductContent from './pages/ManageProductContent';
 import ManageTreatments from './pages/ManageTreatments';
 import ManageCategories from './pages/ManageCategories';
@@ -66,6 +67,7 @@ const App = () => {
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="content" element={<ManageContent />} />
+            <Route path="clinics" element={<ManageClinics />} />
             <Route path="product-content" element={<ManageProductContent />} />
             <Route path="treatments" element={<ManageTreatments />} />
             <Route path="categories" element={<ManageCategories />} />

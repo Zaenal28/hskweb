@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useStore } from '../context/StoreContext';
 import {
   ShieldCheck,
   BadgeCheck,
@@ -83,93 +84,12 @@ const MISI = [
   'Menciptakan nilai tambah dengan integritas tinggi. Menjadi perusahaan yang terkemuka di Indonesia di bidang perawatan kecantikan wajah dengan mengutamakan kualitas dan memberikan pelayanan yang prima.',
 ];
 
-const FACILITY_TABS = [
-  'Semua',
-  'Ruang Treatment',
-  'Konsultasi Dokter',
-  'Bangunan & Resepsionis',
-  'Lounge & VIP',
-  'Alat & Sterilisasi',
-];
-
-const FACILITIES = [
-  {
-    tag: 'Fasilitas Utama',
-    title: 'Ruang Treatment Utama & Higienis',
-    desc: 'Kenyamanan maksimal dengan sterilisasi udara UV-C rutin.',
-    cat: 'Ruang Treatment',
-    image: img('1519494026892-80bbd2d6fd0d', 1200),
-    featured: true,
-  },
-  {
-    tag: 'Konsultasi',
-    title: 'Ruang Konsultasi Dokter',
-    desc: 'Diagnosa mendalam & personal',
-    cat: 'Konsultasi Dokter',
-    image: img('1629909615184-74f495363b67'),
-  },
-  {
-    tag: 'Lounge',
-    title: 'VIP Executive Lounge',
-    desc: 'Kenyamanan santai bernuansa hangat',
-    cat: 'Lounge & VIP',
-    image: img('1584132967334-10e028bd69f7'),
-  },
-  {
-    tag: 'Resepsionis',
-    title: 'Lobi & Meja Resepsionis',
-    desc: 'Pelayanan ramah & cepat',
-    cat: 'Bangunan & Resepsionis',
-    image: img('1590402494682-cd3fb53b1f70'),
-  },
-  {
-    tag: 'Treatment',
-    title: 'Ruang Laser & Facial Care',
-    desc: 'Privasi tindakan & kenyamanan',
-    cat: 'Ruang Treatment',
-    image: img('1570172619644-dfd03ed5d881'),
-  },
-  {
-    tag: 'Sterilisasi',
-    title: 'Alat Sterilisasi Autoclave',
-    desc: 'Standar mutu medis tertinggi',
-    cat: 'Alat & Sterilisasi',
-    image: img('1576091160550-2173dba999ef'),
-  },
-  {
-    tag: 'Produk',
-    title: 'Skincare Gallery & Farmasi',
-    desc: 'Produk resmi BPOM & Halal',
-    cat: 'Lounge & VIP',
-    image: img('1522337360788-8b13dee7a37e'),
-  },
-  {
-    tag: 'Inklusif',
-    title: 'Perawatan Remaja & Pria',
-    desc: 'Semua kalangan & gender',
-    cat: 'Ruang Treatment',
-    image: img('1612349317150-e413f6a5b16d'),
-  },
-  {
-    tag: 'Teknologi',
-    title: 'Skin Analyzer Station',
-    desc: 'Analisa kulit presisi digital',
-    cat: 'Alat & Sterilisasi',
-    image: img('1579684385127-1ef15d508118'),
-  },
-  {
-    tag: 'Eksterior',
-    title: 'Gedung Baru No. 85 Cianjur',
-    desc: 'Parkir luas & akses mudah',
-    cat: 'Bangunan & Resepsionis',
-    image: img('1629909613654-28e377c37b09'),
-  },
-];
-
 const WA_LINK = 'https://wa.me/6281234567890';
 
 const AboutPage = () => {
-  const [activeTab, setActiveTab] = useState('Semua');
+  const { clinics } = useStore();
+  const clinicList = clinics && clinics.length > 0 ? clinics : [];
+  const [activeClinic, setActiveClinic] = useState(0);
   const [preview, setPreview] = useState(null);
   const visiTrackRef = useRef(null);
 
@@ -186,10 +106,8 @@ const AboutPage = () => {
     if (el) el.scrollBy({ left: dir * (el.clientWidth / 2), behavior: 'smooth' });
   };
 
-  const filteredFacilities =
-    activeTab === 'Semua'
-      ? FACILITIES
-      : FACILITIES.filter((f) => f.cat === activeTab);
+  const safeIndex = activeClinic < clinicList.length ? activeClinic : 0;
+  const clinic = clinicList[safeIndex] || null;
 
   return (
     <div
@@ -568,82 +486,139 @@ const AboutPage = () => {
             </div>
           </div>
 
-          {/* Fasilitas */}
+          {/* Fasilitas per Cabang Klinik */}
           <div id="fasilitas" className="scroll-mt-24 lg:col-span-7">
+            {/* Judul + Tombol Pilih Cabang */}
             <div className="bg-white border rounded-3xl p-5 sm:p-6 mb-6" style={{ borderColor: C.border }}>
-              <div className="flex items-start justify-between gap-3 mb-4">
-                <div>
-                  <span
-                    className="text-[10px] font-bold uppercase tracking-[0.25em]"
-                    style={{ color: C.primary }}
-                  >
-                    Eksplorasi Fasilitas
-                  </span>
-                  <h3 className="text-lg font-semibold" style={{ color: C.dark }}>
-                    Suasana &amp; Ruangan Klinik
-                  </h3>
-                </div>
-                <span
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold"
-                  style={{ backgroundColor: C.rose50, color: C.primary }}
-                >
-                  <Building2 className="w-3.5 h-3.5" />
-                  {FACILITIES.length} Ruangan
-                </span>
-              </div>
-              <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                {FACILITY_TABS.map((tab) => (
+              <span
+                className="text-[10px] font-bold uppercase tracking-[0.25em]"
+                style={{ color: C.primary }}
+              >
+                Cabang Kami
+              </span>
+              <h3 className="text-2xl font-semibold mb-4" style={{ color: C.dark }}>
+                Clinic HSK SECRET
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {clinicList.map((c, idx) => (
                   <button
-                    key={tab}
+                    key={c.id ?? idx}
                     type="button"
-                    onClick={() => setActiveTab(tab)}
-                    className="shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold border transition"
+                    onClick={() => setActiveClinic(idx)}
+                    className="px-4 py-2 rounded-full text-xs font-semibold border transition"
                     style={
-                      activeTab === tab
+                      safeIndex === idx
                         ? { backgroundColor: C.primary, borderColor: C.primary, color: '#fff' }
                         : { backgroundColor: '#fff', borderColor: C.border, color: C.sub }
                     }
                   >
-                    {tab}
+                    {c.name}
                   </button>
                 ))}
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              {filteredFacilities.map((f) => (
+            {clinic ? (
+              <>
+                {/* Gambar Besar Gedung Depan Klinik */}
                 <button
-                  key={f.title}
                   type="button"
-                  onClick={() => setPreview(f)}
-                  className={`relative group rounded-2xl overflow-hidden text-left ${
-                    f.featured && activeTab === 'Semua' ? 'col-span-2 aspect-[16/7]' : 'aspect-[4/3]'
-                  }`}
+                  onClick={() =>
+                    setPreview({
+                      tag: clinic.city,
+                      title: clinic.name,
+                      desc: clinic.address,
+                      image: clinic.building,
+                    })
+                  }
+                  className="relative group block w-full rounded-3xl overflow-hidden text-left aspect-[16/9]"
                 >
                   <img
-                    src={f.image}
-                    alt={f.title}
+                    src={clinic.building}
+                    alt={clinic.name}
                     className="absolute inset-0 w-full h-full object-cover transition duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/5 to-transparent" />
                   <span
-                    className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-white text-[9px] font-bold uppercase tracking-wider"
+                    className="absolute top-4 left-4 px-3 py-1 rounded-md bg-white text-[10px] font-bold uppercase tracking-wider"
                     style={{ color: C.primary }}
                   >
-                    {f.tag}
+                    Gedung {clinic.city}
                   </span>
-                  {f.featured && activeTab === 'Semua' && (
-                    <span className="absolute bottom-4 right-4 w-8 h-8 rounded-lg bg-white/20 backdrop-blur flex items-center justify-center text-white">
-                      <Maximize2 className="w-4 h-4" />
-                    </span>
-                  )}
-                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                    <h4 className="text-sm font-semibold leading-tight">{f.title}</h4>
-                    <p className="text-[11px] text-white/80 mt-0.5">{f.desc}</p>
-                  </div>
+                  <span className="absolute bottom-4 right-4 w-9 h-9 rounded-lg bg-white/20 backdrop-blur flex items-center justify-center text-white">
+                    <Maximize2 className="w-4 h-4" />
+                  </span>
+                  <h3 className="absolute bottom-4 left-4 text-white text-xl font-semibold">
+                    {clinic.name}
+                  </h3>
                 </button>
-              ))}
-            </div>
+
+                {/* Alamat Gedung */}
+                <div
+                  className="mt-4 rounded-2xl border p-4 sm:p-5 bg-white"
+                  style={{ borderColor: C.border }}
+                >
+                  <p className="flex items-start gap-2.5 text-sm font-medium" style={{ color: C.dark }}>
+                    <MapPin className="w-4 h-4 mt-0.5 shrink-0" style={{ color: C.primary }} />
+                    {clinic.address}
+                  </p>
+                  {clinic.hours && (
+                    <p className="flex items-center gap-2.5 text-xs mt-2" style={{ color: C.sub }}>
+                      <Clock className="w-3.5 h-3.5 shrink-0" style={{ color: C.primary }} />
+                      {clinic.hours}
+                    </p>
+                  )}
+                </div>
+
+                {/* Foto-foto Ruangan (kecil) */}
+                <div className="flex items-center justify-between mt-6 mb-3">
+                  <h4 className="text-sm font-semibold" style={{ color: C.dark }}>
+                    Suasana &amp; Ruangan
+                  </h4>
+                  <span
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold"
+                    style={{ backgroundColor: C.rose50, color: C.primary }}
+                  >
+                    <Building2 className="w-3.5 h-3.5" />
+                    {(clinic.rooms || []).length} Ruangan
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+                  {(clinic.rooms || []).map((f, i) => (
+                    <button
+                      key={f.id ?? `${f.title}-${i}`}
+                      type="button"
+                      onClick={() => setPreview(f)}
+                      className="relative group rounded-2xl overflow-hidden text-left aspect-[4/3]"
+                    >
+                      <img
+                        src={f.image}
+                        alt={f.title}
+                        className="absolute inset-0 w-full h-full object-cover transition duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                      <span
+                        className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-white text-[9px] font-bold uppercase tracking-wider"
+                        style={{ color: C.primary }}
+                      >
+                        {f.tag}
+                      </span>
+                      <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
+                        <h4 className="text-xs font-semibold leading-tight">{f.title}</h4>
+                        <p className="text-[10px] text-white/80 mt-0.5">{f.desc}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div
+                className="rounded-2xl border p-10 text-center text-sm"
+                style={{ borderColor: C.border, color: C.sub }}
+              >
+                Data cabang klinik belum tersedia.
+              </div>
+            )}
 
             <div className="flex flex-col sm:flex-row gap-3 mt-6">
               <a

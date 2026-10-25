@@ -91,11 +91,11 @@ const ManageProducts = () => {
   return (
     <div className="space-y-6 font-sans">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-xl border border-gray-200">
         <div>
           <div className="flex items-center gap-2">
             <Package className="w-5 h-5 text-[#8B3A4D]" />
-            <h2 className="font-serif text-2xl font-bold text-gray-900">
+            <h2 className="text-xl font-semibold text-gray-900">
               Kelola Data Barang &amp; Produk
             </h2>
           </div>
@@ -129,11 +129,11 @@ const ManageProducts = () => {
       </div>
 
       {/* Responsive Product Table */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-[#FDF2F2] text-[#8B3A4D] border-b border-[#8B3A4D]/10 text-xs font-semibold uppercase tracking-wider">
+              <tr className="bg-gray-50 text-gray-500 border-b border-gray-200 text-xs font-semibold uppercase tracking-wider">
                 <th className="py-4 px-6">Kode SKU</th>
                 <th className="py-4 px-6">Nama Barang / Produk</th>
                 <th className="py-4 px-6">Kategori</th>

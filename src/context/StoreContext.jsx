@@ -706,6 +706,61 @@ const defaultRecipientAddresses = [
   },
 ];
 
+/* Data Cabang Klinik HSK SECRET (dikelola lewat Admin → Kelola Data Klinik) */
+const clinicImg = (id, w = 1200) =>
+  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
+
+const defaultClinics = [
+  {
+    id: 1,
+    name: 'Clinic Cianjur',
+    city: 'Cianjur',
+    address: 'Jl. Ir. H. Juanda No. 85, Cianjur, Jawa Barat 43215',
+    hours: 'Setiap Hari · 09.00 – 18.00 WIB',
+    building: clinicImg('1629909613654-28e377c37b09', 1600),
+    rooms: [
+      { id: 101, tag: 'Treatment', title: 'Ruang Treatment Utama', desc: 'Sterilisasi udara UV-C rutin', image: clinicImg('1519494026892-80bbd2d6fd0d') },
+      { id: 102, tag: 'Konsultasi', title: 'Ruang Konsultasi Dokter', desc: 'Diagnosa mendalam & personal', image: clinicImg('1629909615184-74f495363b67') },
+      { id: 103, tag: 'Resepsionis', title: 'Lobi & Meja Resepsionis', desc: 'Pelayanan ramah & cepat', image: clinicImg('1590402494682-cd3fb53b1f70') },
+      { id: 104, tag: 'Laser', title: 'Ruang Laser & Facial', desc: 'Privasi tindakan & kenyamanan', image: clinicImg('1570172619644-dfd03ed5d881') },
+      { id: 105, tag: 'Lounge', title: 'VIP Executive Lounge', desc: 'Suasana santai bernuansa hangat', image: clinicImg('1584132967334-10e028bd69f7') },
+      { id: 106, tag: 'Sterilisasi', title: 'Alat Sterilisasi Autoclave', desc: 'Standar mutu medis tertinggi', image: clinicImg('1576091160550-2173dba999ef') },
+    ],
+  },
+  {
+    id: 2,
+    name: 'Clinic Purwakarta',
+    city: 'Purwakarta',
+    address: 'Jl. Veteran No. 112, Nagri Kaler, Purwakarta, Jawa Barat 41111',
+    hours: 'Setiap Hari · 09.00 – 18.00 WIB',
+    building: clinicImg('1580281658626-ee379f3cce93', 1600),
+    rooms: [
+      { id: 201, tag: 'Treatment', title: 'Ruang Facial Premium', desc: 'Perawatan wajah eksklusif', image: clinicImg('1512290900672-1f84d1714b12') },
+      { id: 202, tag: 'Konsultasi', title: 'Ruang Konsultasi', desc: 'Analisa kulit personal', image: clinicImg('1579684385127-1ef15d508118') },
+      { id: 203, tag: 'Resepsionis', title: 'Area Resepsionis', desc: 'Sambutan hangat & nyaman', image: clinicImg('1497366216548-37526070297c') },
+      { id: 204, tag: 'Treatment', title: 'Ruang Body Treatment', desc: 'Perawatan tubuh menyeluruh', image: clinicImg('1540555700478-4be289fbecef') },
+      { id: 205, tag: 'Lounge', title: 'Waiting Lounge', desc: 'Ruang tunggu modern', image: clinicImg('1618221195710-dd6b41faaea6') },
+      { id: 206, tag: 'Teknologi', title: 'Skin Analyzer Station', desc: 'Analisa kulit presisi digital', image: clinicImg('1551190822-a9333d879b1f') },
+    ],
+  },
+  {
+    id: 3,
+    name: 'Clinic Bandung',
+    city: 'Bandung',
+    address: 'Jl. Riau (L.L.R.E. Martadinata) No. 88, Bandung, Jawa Barat 40115',
+    hours: 'Setiap Hari · 09.00 – 19.00 WIB',
+    building: clinicImg('1497366811353-6870744d04b2', 1600),
+    rooms: [
+      { id: 301, tag: 'Treatment', title: 'Ruang Treatment Signature', desc: 'Interior elegan & higienis', image: clinicImg('1600334089648-b0d9d3028eb2') },
+      { id: 302, tag: 'Konsultasi', title: 'Ruang Dokter Estetika', desc: 'Konsultasi privat & nyaman', image: clinicImg('1629909615184-74f495363b67') },
+      { id: 303, tag: 'Resepsionis', title: 'Lobi Utama', desc: 'Desain mewah & modern', image: clinicImg('1497366754035-f200968a6e72') },
+      { id: 304, tag: 'Laser', title: 'Ruang Laser Premium', desc: 'Teknologi terkini', image: clinicImg('1570172619644-dfd03ed5d881') },
+      { id: 305, tag: 'Lounge', title: 'Executive Lounge', desc: 'Area tunggu eksklusif', image: clinicImg('1584132967334-10e028bd69f7') },
+      { id: 306, tag: 'Farmasi', title: 'Skincare Gallery', desc: 'Produk resmi BPOM & Halal', image: clinicImg('1522337360788-8b13dee7a37e') },
+    ],
+  },
+];
+
 const StoreContext = createContext(null);
 
 export const StoreProvider = ({ children }) => {
@@ -773,6 +828,15 @@ export const StoreProvider = ({ children }) => {
     const saved = localStorage.getItem('hsk_v1_recipient_addresses');
     return saved ? JSON.parse(saved) : defaultRecipientAddresses;
   });
+
+  const [clinics, setClinics] = useState(() => {
+    const saved = localStorage.getItem('hsk_v1_clinics');
+    return saved ? JSON.parse(saved) : defaultClinics;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('hsk_v1_clinics', JSON.stringify(clinics));
+  }, [clinics]);
 
   useEffect(() => {
     localStorage.setItem('hsk_v4_clinic_slides', JSON.stringify(clinicSlides));
@@ -1303,6 +1367,9 @@ export const StoreProvider = ({ children }) => {
         setCurrentUser,
         recipientAddresses,
         setRecipientAddresses,
+        clinics,
+        setClinics,
+        defaultClinics,
         saveProfileAndRecipient,
         setPrimaryRecipientAddress,
         deleteRecipientAddress,
