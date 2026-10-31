@@ -5,16 +5,32 @@ import {
   Lock,
   Phone,
   User,
-  Sparkles,
   Eye,
   EyeOff,
   ArrowLeft,
   CheckCircle2,
-  UserPlus,
-  LogIn,
-  UserCheck,
+  AlertCircle,
   ShoppingBag,
 } from 'lucide-react';
+
+/* Akun demo untuk mencoba login */
+const DEMO_PHONE = '081234567890';
+const DEMO_PASSWORD = 'password123';
+
+/* Input dengan ikon di kiri (dipakai di form Masuk & Daftar) */
+const Field = ({ label, icon: Icon, right, ...inputProps }) => (
+  <label className="block">
+    <span className="block text-sm font-medium text-gray-700 mb-1.5">{label}</span>
+    <span className="relative block">
+      <Icon className="w-[18px] h-[18px] text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+      <input
+        {...inputProps}
+        className="w-full pl-11 pr-11 py-3 rounded-xl border border-gray-200 bg-white text-gray-800 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#DA5B86]/25 focus:border-[#DA5B86] transition"
+      />
+      {right}
+    </span>
+  </label>
+);
 
 const Login = () => {
   const navigate = useNavigate();
@@ -29,11 +45,11 @@ const Login = () => {
   const initialMode = searchParams.get('tab') === 'register' ? 'register' : 'login';
   const [activeTab, setActiveTab] = useState(initialMode); // 'login' | 'register'
 
-  // State Form Login Customer (No Telpon/WA & Password)
-  const [loginPhone, setLoginPhone] = useState('081234567890');
-  const [loginPassword, setLoginPassword] = useState('password123');
+  // Form Masuk (No. HP/WA & Password)
+  const [loginPhone, setLoginPhone] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
 
-  // State Form Daftar Akun Baru (No Telpon/WA, Nama, Password)
+  // Form Daftar (No. HP/WA, Nama, Password)
   const [regPhone, setRegPhone] = useState('');
   const [regName, setRegName] = useState('');
   const [regPassword, setRegPassword] = useState('');
@@ -49,11 +65,17 @@ const Login = () => {
     }
   }, [searchParams]);
 
-  // Handler 1: Login Customer dengan Nomor Telepon / WA & Password
+  const switchTab = (tab) => {
+    setActiveTab(tab);
+    setError('');
+    setSuccessMsg('');
+    setShowPassword(false);
+  };
+
+  // Masuk dengan Nomor HP / WA & Password
   const handleCustomerLogin = (e) => {
     e.preventDefault();
     setError('');
-
     const res = loginCustomerByPhone({
       phone: loginPhone,
       password: loginPassword,
@@ -65,370 +87,264 @@ const Login = () => {
     navigate('/products');
   };
 
-  // Handler 2: Daftar Akun dengan No Telpon/WA, Nama, dan Password
+  // Daftar akun baru
   const handleCustomerRegister = (e) => {
     e.preventDefault();
     setError('');
     if (!regPhone.trim() || !regName.trim() || !regPassword.trim()) {
-      setError('Mohon lengkapi Nomor Telepon/WA, Nama, dan Password.');
+      setError('Mohon lengkapi Nomor HP/WA, Nama, dan Password.');
       return;
     }
-
     const res = registerCustomerByPhone({
       phone: regPhone,
       name: regName,
       password: regPassword,
     });
-
     if (!res.success) {
       setError(res.message);
       return;
     }
-
-    setSuccessMsg(
-      'Pendaftaran akun berhasil! Mengarahkan ke Halaman Utama Produk...'
-    );
-    setTimeout(() => {
-      navigate('/products');
-    }, 600);
+    setSuccessMsg('Akun berhasil dibuat! Mengarahkan ke halaman produk...');
+    setTimeout(() => navigate('/products'), 600);
   };
 
-  // Handler 3: Login Sebagai Guest / Tamu -> Langsung ke Halaman Utama Produk (/products)
+  // Masuk sebagai Tamu -> langsung ke halaman produk
   const handleGuestLogin = () => {
     loginAsGuest();
     navigate('/products');
   };
 
+  const fillDemo = () => {
+    setLoginPhone(DEMO_PHONE);
+    setLoginPassword(DEMO_PASSWORD);
+    setError('');
+  };
+
+  const passwordToggle = (
+    <button
+      type="button"
+      onClick={() => setShowPassword((v) => !v)}
+      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#DA5B86] transition"
+      aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'}
+    >
+      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+    </button>
+  );
+
+  const isLogin = activeTab === 'login';
+
   return (
-    <div className="min-h-screen bg-[#FDF2F2] flex flex-col justify-center items-center px-4 py-10 font-sans">
-      <div className="w-full max-w-lg mb-4 flex items-center justify-between">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#8B3A4D] hover:underline"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Halaman Klinik
-        </Link>
+    <div className="min-h-screen bg-[#FDF2F2] flex flex-col items-center justify-center px-4 py-10 font-sans">
+      <div className="w-full max-w-md">
+        {/* Kembali */}
         <Link
           to="/products"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[#8B3A4D] hover:underline"
+          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#DA5B86] mb-4 transition"
         >
-          <ShoppingBag className="w-4 h-4" />
-          Halaman Utama Produk
+          <ArrowLeft className="w-4 h-4" />
+          Kembali ke Toko
         </Link>
-      </div>
 
-      <div className="w-full max-w-lg bg-white rounded-3xl shadow-xl border border-[#8B3A4D]/10 p-6 sm:p-9">
-        {/* Brand Header Khusus Customer & Guest */}
-        <div className="text-center mb-6">
-          <div className="flex justify-center mb-3">
+        <div className="bg-white rounded-3xl shadow-[0_10px_40px_-12px_rgba(218,91,134,0.25)] p-7 sm:p-9">
+          {/* Logo & Judul */}
+          <div className="text-center mb-7">
             <img
               src="/hsk-logo.png"
               alt="HSK SECRET"
-              className="h-14 w-auto object-contain"
+              className="h-12 w-auto object-contain mx-auto mb-5"
             />
+            <h1 className="text-2xl font-bold text-gray-900">
+              {isLogin ? 'Selamat Datang Kembali' : 'Buat Akun Baru'}
+            </h1>
+            <p className="text-sm text-gray-500 mt-1.5">
+              {isLogin
+                ? 'Masuk untuk melanjutkan belanja Anda'
+                : 'Daftar gratis, cukup dengan nomor HP / WhatsApp'}
+            </p>
           </div>
-          <span className="inline-block px-3 py-1 rounded-full bg-[#FDF2F2] text-[#8B3A4D] text-[10px] font-bold uppercase tracking-widest mb-1">
-            HALAMAN KHUSUS CUSTOMER &amp; GUEST
-          </span>
-          <p className="text-xs uppercase tracking-[0.22em] text-gray-400 mt-1">
-            Login Customer · Daftar Akun · Guest / Tamu
-          </p>
-        </div>
 
-        {/* Status Sesi Aktif (Jika Sudah Login) */}
-        {currentUser && (
-          <div className="mb-5 p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between text-xs text-emerald-800">
-            <div>
-              <span className="font-bold block">
-                Aktif sebagai: {currentUser.name} ({currentUser.accountType})
+          {/* Sudah login */}
+          {currentUser && (
+            <div className="mb-5 p-3 rounded-xl bg-emerald-50 text-sm text-emerald-800 flex items-center justify-between gap-3">
+              <span>
+                Anda masuk sebagai <strong>{currentUser.name}</strong>
               </span>
-              {currentUser.phone && (
-                <span className="text-[11px] text-emerald-600">
-                  No. WA: {currentUser.phone}
-                </span>
-              )}
+              <Link to="/products" className="font-semibold text-emerald-700 hover:underline shrink-0">
+                Ke Toko →
+              </Link>
             </div>
-            <Link
-              to="/products"
-              className="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold uppercase tracking-wider text-[10px] hover:bg-emerald-700 transition"
-            >
-              Ke Produk →
-            </Link>
-          </div>
-        )}
+          )}
 
-        {/* Pilihan Tab: 1. Login | 2. Daftar | 3. Login Guest / Tamu */}
-        <div className="grid grid-cols-3 gap-2 p-1.5 rounded-2xl bg-[#F9FAFB] border border-gray-200/80 mb-6">
-          <button
-            type="button"
-            onClick={() => {
-              setActiveTab('login');
-              setError('');
-            }}
-            className={`flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl text-xs font-bold uppercase tracking-wider transition ${
-              activeTab === 'login'
-                ? 'bg-[#DA5B86] text-white shadow-sm'
-                : 'text-gray-600 hover:text-[#8B3A4D]'
-            }`}
-          >
-            <LogIn className="w-3.5 h-3.5" />
-            <span>Login</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              setActiveTab('register');
-              setError('');
-            }}
-            className={`flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl text-xs font-bold uppercase tracking-wider transition ${
-              activeTab === 'register'
-                ? 'bg-[#DA5B86] text-white shadow-sm'
-                : 'text-gray-600 hover:text-[#8B3A4D]'
-            }`}
-          >
-            <UserPlus className="w-3.5 h-3.5" />
-            <span>Daftar</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={handleGuestLogin}
-            className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl text-xs font-bold uppercase tracking-wider bg-[#FDF2F2] text-[#8B3A4D] hover:bg-[#DA5B86] hover:text-white border border-[#8B3A4D]/20 transition"
-          >
-            <UserCheck className="w-3.5 h-3.5" />
-            <span>Guest / Tamu</span>
-          </button>
-        </div>
-
-        {error && (
-          <div className="mb-5 p-3.5 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 font-medium">
-            {error}
-          </div>
-        )}
-
-        {successMsg && (
-          <div className="mb-5 p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 font-semibold flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span>{successMsg}</span>
-          </div>
-        )}
-
-        {/* ==================== TAB 1: HALAMAN LOGIN CUSTOMER (NO TELPON/WA & PASSWORD) ==================== */}
-        {activeTab === 'login' && (
-          <div className="space-y-5">
-            <div className="p-3.5 rounded-xl bg-[#FDF2F2] border border-[#8B3A4D]/20 text-xs flex items-center justify-between gap-2">
-              <div>
-                <span className="font-bold text-[#8B3A4D] block">
-                  Akun Demo Pelanggan:
-                </span>
-                <span className="text-gray-600">
-                  No. WA: <strong>081234567890</strong> · Pass:{' '}
-                  <strong>password123</strong>
-                </span>
-              </div>
+          {/* Tab Masuk / Daftar */}
+          <div className="grid grid-cols-2 p-1 rounded-xl bg-gray-100 mb-6">
+            {[
+              { key: 'login', label: 'Masuk' },
+              { key: 'register', label: 'Daftar' },
+            ].map((t) => (
               <button
+                key={t.key}
                 type="button"
-                onClick={() => {
-                  setLoginPhone('081234567890');
-                  setLoginPassword('password123');
+                onClick={() => switchTab(t.key)}
+                className={`py-2.5 rounded-lg text-sm font-semibold transition ${
+                  activeTab === t.key
+                    ? 'bg-white text-[#DA5B86] shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Pesan error / sukses */}
+          {error && (
+            <div className="mb-4 p-3 rounded-xl bg-red-50 text-sm text-red-700 flex items-start gap-2">
+              <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
+              <span>{error}</span>
+            </div>
+          )}
+          {successMsg && (
+            <div className="mb-4 p-3 rounded-xl bg-emerald-50 text-sm text-emerald-800 flex items-start gap-2">
+              <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" />
+              <span>{successMsg}</span>
+            </div>
+          )}
+
+          {/* ===== Form Masuk ===== */}
+          {isLogin && (
+            <form onSubmit={handleCustomerLogin} className="space-y-4">
+              <Field
+                label="Nomor HP / WhatsApp"
+                icon={Phone}
+                type="tel"
+                required
+                value={loginPhone}
+                onChange={(e) => {
+                  setLoginPhone(e.target.value);
                   setError('');
                 }}
-                className="px-2.5 py-1.5 rounded-lg bg-[#DA5B86] text-white text-[10px] font-bold uppercase tracking-wider shrink-0"
-              >
-                Isi Otomatis
-              </button>
-            </div>
-
-            <form onSubmit={handleCustomerLogin} className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-2">
-                  No. Telpon / WhatsApp (WA)
-                </label>
-                <div className="relative">
-                  <Phone className="w-5 h-5 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    required
-                    value={loginPhone}
-                    onChange={(e) => {
-                      setLoginPhone(e.target.value);
-                      setError('');
-                    }}
-                    placeholder="Contoh: 081234567890"
-                    className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-[#F9FAFB] text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B3A4D]/30 focus:border-[#8B3A4D]"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-2">
-                  Password
-                </label>
-                <div className="relative">
-                  <Lock className="w-5 h-5 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    value={loginPassword}
-                    onChange={(e) => {
-                      setLoginPassword(e.target.value);
-                      setError('');
-                    }}
-                    placeholder="Masukkan password Anda"
-                    className="w-full pl-11 pr-11 py-3 rounded-xl border border-gray-200 bg-[#F9FAFB] text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B3A4D]/30 focus:border-[#8B3A4D]"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#8B3A4D]"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="w-4 h-4" />
-                    ) : (
-                      <Eye className="w-4 h-4" />
-                    )}
-                  </button>
-                </div>
-              </div>
+                placeholder="08xxxxxxxxxx"
+              />
+              <Field
+                label="Password"
+                icon={Lock}
+                type={showPassword ? 'text' : 'password'}
+                required
+                value={loginPassword}
+                onChange={(e) => {
+                  setLoginPassword(e.target.value);
+                  setError('');
+                }}
+                placeholder="Masukkan password"
+                right={passwordToggle}
+              />
 
               <button
                 type="submit"
-                className="w-full py-3.5 px-6 rounded-xl bg-[#DA5B86] hover:bg-[#C84873] text-white font-bold text-xs tracking-widest uppercase shadow-md hover:shadow-lg transition"
+                className="w-full py-3.5 rounded-xl bg-[#DA5B86] hover:bg-[#C84873] text-white font-semibold text-sm shadow-md shadow-[#DA5B86]/25 transition"
               >
-                Login Customer Sekarang
+                Masuk
               </button>
-            </form>
 
-            <div className="text-center text-xs text-gray-500">
-              Belum punya akun?{' '}
-              <button
-                type="button"
-                onClick={() => setActiveTab('register')}
-                className="font-bold text-[#8B3A4D] hover:underline"
-              >
-                Daftar dengan Nomor Telepon / WA
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* ==================== TAB 2: HALAMAN DAFTAR AKUN (NO TELPON/WA, NAMA, PASSWORD) ==================== */}
-        {activeTab === 'register' && (
-          <form onSubmit={handleCustomerRegister} className="space-y-4">
-            <div className="p-3 rounded-xl bg-[#FDF2F2] border border-[#8B3A4D]/15 text-xs text-[#8B3A4D]">
-              Daftar akun menggunakan <strong>No. Telpon / WA</strong>,{' '}
-              <strong>Nama</strong>, dan <strong>Password</strong> untuk mulai
-              berbelanja produk HSK SECRET.
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-2">
-                No. Telpon / WhatsApp (WA) *
-              </label>
-              <div className="relative">
-                <Phone className="w-5 h-5 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="tel"
-                  required
-                  value={regPhone}
-                  onChange={(e) => {
-                    setRegPhone(e.target.value);
-                    setError('');
-                  }}
-                  placeholder="Contoh: 0812-8899-0011"
-                  className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-[#F9FAFB] text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B3A4D]/30 focus:border-[#8B3A4D]"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-2">
-                Nama Lengkap *
-              </label>
-              <div className="relative">
-                <User className="w-5 h-5 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  required
-                  value={regName}
-                  onChange={(e) => {
-                    setRegName(e.target.value);
-                    setError('');
-                  }}
-                  placeholder="Masukkan nama lengkap Anda"
-                  className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-[#F9FAFB] text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B3A4D]/30 focus:border-[#8B3A4D]"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-2">
-                Password *
-              </label>
-              <div className="relative">
-                <Lock className="w-5 h-5 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  required
-                  value={regPassword}
-                  onChange={(e) => {
-                    setRegPassword(e.target.value);
-                    setError('');
-                  }}
-                  placeholder="Buat password akun Anda"
-                  className="w-full pl-11 pr-11 py-3 rounded-xl border border-gray-200 bg-[#F9FAFB] text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B3A4D]/30 focus:border-[#8B3A4D]"
-                />
+              <p className="text-center text-xs text-gray-400">
+                Ingin mencoba?{' '}
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#8B3A4D]"
+                  onClick={fillDemo}
+                  className="font-semibold text-[#DA5B86] hover:underline"
                 >
-                  {showPassword ? (
-                    <EyeOff className="w-4 h-4" />
-                  ) : (
-                    <Eye className="w-4 h-4" />
-                  )}
+                  Gunakan akun demo
                 </button>
-              </div>
-            </div>
+              </p>
+            </form>
+          )}
 
-            <button
-              type="submit"
-              className="w-full py-3.5 px-6 rounded-xl bg-[#DA5B86] hover:bg-[#C84873] text-white font-bold text-xs tracking-widest uppercase shadow-md hover:shadow-lg transition"
-            >
-              Daftar Akun Sekarang
-            </button>
+          {/* ===== Form Daftar ===== */}
+          {!isLogin && (
+            <form onSubmit={handleCustomerRegister} className="space-y-4">
+              <Field
+                label="Nama Lengkap"
+                icon={User}
+                type="text"
+                required
+                value={regName}
+                onChange={(e) => {
+                  setRegName(e.target.value);
+                  setError('');
+                }}
+                placeholder="Nama Anda"
+              />
+              <Field
+                label="Nomor HP / WhatsApp"
+                icon={Phone}
+                type="tel"
+                required
+                value={regPhone}
+                onChange={(e) => {
+                  setRegPhone(e.target.value);
+                  setError('');
+                }}
+                placeholder="08xxxxxxxxxx"
+              />
+              <Field
+                label="Password"
+                icon={Lock}
+                type={showPassword ? 'text' : 'password'}
+                required
+                value={regPassword}
+                onChange={(e) => {
+                  setRegPassword(e.target.value);
+                  setError('');
+                }}
+                placeholder="Buat password"
+                right={passwordToggle}
+              />
 
-            <div className="text-center text-xs text-gray-500">
-              Sudah punya akun?{' '}
               <button
-                type="button"
-                onClick={() => setActiveTab('login')}
-                className="font-bold text-[#8B3A4D] hover:underline"
+                type="submit"
+                className="w-full py-3.5 rounded-xl bg-[#DA5B86] hover:bg-[#C84873] text-white font-semibold text-sm shadow-md shadow-[#DA5B86]/25 transition"
               >
-                Login di sini
+                Daftar Sekarang
               </button>
-            </div>
-          </form>
-        )}
+            </form>
+          )}
 
-        {/* ==================== TOMBOL BESAR: LOGIN SEBAGAI GUEST / TAMU ==================== */}
-        <div className="mt-6 pt-6 border-t border-gray-100 space-y-3">
+          {/* Pemisah */}
+          <div className="flex items-center gap-3 my-6">
+            <span className="flex-1 h-px bg-gray-200" />
+            <span className="text-xs text-gray-400">atau</span>
+            <span className="flex-1 h-px bg-gray-200" />
+          </div>
+
+          {/* Masuk sebagai Tamu */}
           <button
             type="button"
             onClick={handleGuestLogin}
-            className="w-full py-3.5 px-5 rounded-xl border-2 border-[#8B3A4D] bg-[#FDF2F2]/70 hover:bg-[#DA5B86] text-[#8B3A4D] hover:text-white font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition shadow-sm"
+            className="w-full py-3.5 rounded-xl border border-gray-200 hover:border-[#DA5B86] hover:bg-[#FDF2F2] text-gray-700 font-semibold text-sm flex items-center justify-center gap-2 transition"
           >
-            <UserCheck className="w-4 h-4" />
-            <span>Login sebagai Guest / Tamu (Langsung ke Produk)</span>
+            <ShoppingBag className="w-4 h-4 text-[#DA5B86]" />
+            Belanja sebagai Tamu
           </button>
+          <p className="text-center text-xs text-gray-400 mt-2">
+            Tanpa daftar, langsung lihat &amp; beli produk
+          </p>
 
-          <div className="pt-2 text-center text-[11px] text-gray-400">
-            <span>© 2026 HSK SECRET Beauty · Khusus Pelanggan &amp; Tamu</span>
-          </div>
+          {/* Ganti mode */}
+          <p className="text-center text-sm text-gray-500 mt-6">
+            {isLogin ? 'Belum punya akun? ' : 'Sudah punya akun? '}
+            <button
+              type="button"
+              onClick={() => switchTab(isLogin ? 'register' : 'login')}
+              className="font-semibold text-[#DA5B86] hover:underline"
+            >
+              {isLogin ? 'Daftar' : 'Masuk'}
+            </button>
+          </p>
         </div>
+
+        <p className="text-center text-xs text-gray-400 mt-6">
+          © 2026 HSK SECRET Beauty
+        </p>
       </div>
     </div>
   );

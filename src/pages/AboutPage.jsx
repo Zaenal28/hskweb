@@ -556,14 +556,15 @@ const AboutPage = () => {
             >
               <Building2 className="absolute -right-4 -bottom-4 w-24 h-24 text-white/15" />
               <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/80">
-                Lokasi Gedung Baru
+                Klinik Pusat HSK Secret
               </span>
-              <h3 className="text-lg font-semibold mt-1 mb-2">
-                Jl. Ir. H. Juanda No. 85 Cianjur
+              <h3 className="text-lg font-semibold mt-1 mb-2 relative">
+                Jl. Ir. H. Juanda No.85, Bojongherang, Kec. Cianjur, Kabupaten
+                Cianjur, Jawa Barat 43216
               </h3>
               <p className="text-xs text-white/85 leading-relaxed relative">
-                Gedung baru dengan kapasitas lebih luas, fasilitas lengkap,
-                ruang treatment eksklusif, dan parkir memadai.
+                Klinik dengan kapasitas lebih luas, fasilitas lengkap, ruang
+                treatment eksklusif, dan parkir memadai.
               </p>
             </div>
           </div>
@@ -681,9 +682,9 @@ const AboutPage = () => {
               Berkomitmen menghadirkan kulit sehat bercahaya melalui teknologi
               terkini dan sentuhan tim medis profesional.
             </p>
-            <p className="flex items-center gap-2 text-xs mb-1.5" style={{ color: C.sub }}>
-              <MapPin className="w-3.5 h-3.5" style={{ color: C.primary }} />
-              Jl. Ir. H. Juanda No. 85, Cianjur, Jawa Barat
+            <p className="flex items-start gap-2 text-xs mb-1.5" style={{ color: C.sub }}>
+              <MapPin className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: C.primary }} />
+              Jl. Ir. H. Juanda No.85, Bojongherang, Kec. Cianjur, Kabupaten Cianjur, Jawa Barat 43216
             </p>
             <p className="flex items-center gap-2 text-xs" style={{ color: C.sub }}>
               <Clock className="w-3.5 h-3.5" style={{ color: C.primary }} />
