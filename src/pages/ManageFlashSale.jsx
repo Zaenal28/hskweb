@@ -153,11 +153,11 @@ const ManageFlashSale = () => {
   return (
     <div className="space-y-6 font-sans">
       {/* Header */}
-      <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="bg-white p-6 rounded-xl border border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
             <Zap className="w-5 h-5 text-[#8B3A4D]" />
-            <h2 className="font-serif text-2xl font-bold text-gray-900">
+            <h2 className="text-xl font-semibold text-gray-900">
               Kelola Flash Sale &amp; Harga Coret Produk
             </h2>
           </div>
@@ -184,7 +184,7 @@ const ManageFlashSale = () => {
       {/* BAGIAN 1: PENGATURAN BANNER & COUNTDOWN FLASH SALE */}
       <form
         onSubmit={handleSaveBanner}
-        className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-5"
+        className="bg-white rounded-xl border border-gray-200 p-6 space-y-5"
       >
         <div className="flex items-center justify-between border-b border-gray-100 pb-3">
           <h3 className="font-serif text-lg font-bold text-[#8B3A4D] flex items-center gap-2">
@@ -282,7 +282,7 @@ const ManageFlashSale = () => {
       </form>
 
       {/* BAGIAN 2: TABEL PENGATURAN PRODUK FLASH SALE, POTONGAN & HARGA CORET */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <div className="p-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
             <h3 className="font-serif text-lg font-bold text-gray-900">

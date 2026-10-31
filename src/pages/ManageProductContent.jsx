@@ -184,11 +184,11 @@ const ManageProductContent = () => {
   return (
     <div className="space-y-6 font-sans">
       {/* Header */}
-      <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="bg-white p-6 rounded-xl border border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
             <ShoppingBag className="w-5 h-5 text-[#8B3A4D]" />
-            <h2 className="font-serif text-2xl font-bold text-gray-900">
+            <h2 className="text-xl font-semibold text-gray-900">
               Kelola Konten Halaman Produk
             </h2>
           </div>
@@ -225,7 +225,7 @@ const ManageProductContent = () => {
       )}
 
       {/* Slide list */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 space-y-6">
+      <div className="bg-white rounded-xl border border-gray-200 p-6 sm:p-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-gray-100 pb-4">
           <div>
             <div className="flex items-center gap-2">
@@ -393,7 +393,7 @@ const ManageProductContent = () => {
       {/* Promo content */}
       <form
         onSubmit={handleSaveContent}
-        className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 space-y-6"
+        className="bg-white rounded-xl border border-gray-200 p-6 sm:p-8 space-y-6"
       >
         <h3 className="font-serif text-lg font-bold text-[#8B3A4D] border-b border-gray-100 pb-3">
           Teks Promo Halaman Produk

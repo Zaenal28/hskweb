@@ -220,19 +220,13 @@ const ProductsPage = () => {
               to="/"
               className="hover:text-[#8B3A4D] transition whitespace-nowrap"
             >
-              Home (Clinic)
+              Clinic HSK Secret
             </Link>
-            <a
-              href="#featured"
+            <Link
+              to="/shop"
               className="hover:text-[#8B3A4D] transition whitespace-nowrap"
             >
-              Shop
-            </a>
-            <Link
-              to="/products"
-              className="text-[#8B3A4D] border-b-2 border-[#8B3A4D] pb-1 whitespace-nowrap"
-            >
-              Products
+              Semua Produk
             </Link>
           </nav>
 
